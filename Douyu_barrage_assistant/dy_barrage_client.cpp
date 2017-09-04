@@ -1,7 +1,6 @@
 
 #include "stdafx.h"
 #include "data_def.h"
-#include "barrage_qtts.h"
 #include "dy_barrage_client.h"
 #include <string.h>
 #include <iostream>
@@ -194,17 +193,12 @@ void dy_barrage_client::on_barrage(string data)
 	const char* content_utf8 = barr_res.content.c_str();
 	string userName_uni = UTF82Unicode(userName_utf8);
 	string content_uni = UTF82Unicode(content_utf8);
-	string src_text = userName_uni + "说";
+	src_text = userName_uni + "说";
 	src_text.append(content_uni);
-	const char* src = src_text.c_str();
+	//const char* src = src_text.c_str();
 	//wcout.imbue(locale("chs"));
 	//wcout << userName_uni << ": " << content_uni << endl;
 	cout << userName_uni << ": " << content_uni << endl;
-	int src_ret = qtts_fun(src);
-	if (src_ret == -1)
-	{
-		cout << "语音合成失败 " << endl;
-	}
 	//cout << barr_res.sender_name << ": " << barr_res.content << endl;
 }
 

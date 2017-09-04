@@ -4,9 +4,20 @@
 
 #include "stdafx.h"
 
+class barrage_qtts
+{
+public:
+	barrage_qtts();
+	~barrage_qtts();
 
-//”Ô“Ù∫œ≥…≥Ã–Ú
-int qtts_fun(const char *src_text);
+	//µ«¬Ω
+	int Login();
+
+	int text_to_speech(const char* src_text, const char*  des_path, const char* params);
+
+	void Logout();
+};
+
 
 #endif // __BARRAGE_QTTS_H__
 

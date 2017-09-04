@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "dy_barrage_client.h"
+#include "barrage_qtts.h"
 #include <iostream>
 #include <string>
 #include <stdint.h>
@@ -15,7 +16,7 @@
 #   include <winsock.h>
 #   pragma comment(lib, "ws2_32")
 #endif
-
+#pragma comment(lib,"winMM.lib")   //可播放音频
 using namespace std;
 
 void usage()
@@ -43,7 +44,16 @@ void* thr_keep_live(void *args)
 	}
 }
 
-
+/*#ifdef _MSC_VER
+void thr_qtts(void *args)
+#else
+void* thr_qtts(void *args)
+#endif 
+{
+	dy_barrage_client *dy_bclient = (dy_barrage_client *)args;
+	
+}
+*/
 int main(int argc,char **args)
 {
 	int ret = 0;
@@ -98,14 +108,33 @@ int main(int argc,char **args)
 		return 0;
 	}
 #endif 
-	//while (1)
-	//{
+	barrage_qtts b_qtts;
+	ret = b_qtts.Login();
+	if (ret != 0) 
+	{
+		cout << "fail to Login xunfei" << endl;
+		return 0;
+	}
+	const char* session_begin_params = "voice_name = yanping, text_encoding = gb2312, sample_rate = 16000, speed = 30, volume = 50, pitch = 50, rdn = 2";
+	const char* filename = "tts_sample.wav"; //合成的语音文件名称
+	const char* src_text;
+	while (1)
+	{
 		dy_bclient.get_dy_server_msg();
-	//}
+		src_text = dy_bclient.src_text.c_str();
+		ret = b_qtts.text_to_speech(src_text, filename, session_begin_params);
+		if (ret != 0)
+		{
+			cout << "语音合成失败" << endl;
+		}
+		else {
+			PlaySound(filename, NULL, SND_SYNC);
+		}
+	}
 
 #ifdef _MSC_VER
 #else
-	pthread_join(tid, NULL);
+	pthread_join(tid, NULL);	//回收线程
 #endif
 
 	system("pause");

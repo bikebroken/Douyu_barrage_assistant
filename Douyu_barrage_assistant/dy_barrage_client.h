@@ -12,7 +12,7 @@ class dy_barrage_client
 {
 public:
 	int sock_fd;		//socket file descriptor
-
+	string src_text;
 public:
 	dy_barrage_client();
 	~dy_barrage_client();
